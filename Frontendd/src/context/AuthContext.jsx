@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
-        window.location.href = '/login';
+        window.location.href = '/thank-you';
     };
 
     // Always render children, pass loading state through context
