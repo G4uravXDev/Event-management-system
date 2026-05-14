@@ -8,12 +8,17 @@
     "start": "node src/server.js",
     "seed": "node src/seed.js"
   },
-  "keywords": ["events", "gssoc", "open-source"],
+  "keywords": [
+    "events",
+    "gssoc",
+    "open-source"
+  ],
   "author": "anubhavxdev",
   "license": "MIT",
   "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^1.41.3",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

@@ -37,8 +37,7 @@ app.use(compression());
 // Basic rate limit
 app.use('/api', rateLimit({ windowMs: 60 * 1000, max: 120 }));
 
-// Static posters
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// Posters are served from Cloudinary CDN — no local static serving needed
 
 // API Routes (mounted later when implemented)
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
