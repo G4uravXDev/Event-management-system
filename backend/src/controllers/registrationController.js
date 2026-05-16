@@ -2,6 +2,8 @@ import Event from '../models/Event.js';
 import Registration from '../models/Registration.js';
 import { generateQRCodeDataUrl } from '../utils/qrcode.js';
 import { sendEmail } from '../utils/email.js';
+import path from 'path';
+import { createObjectCsvWriter } from 'csv-writer';
 
 export const registerForEvent = async (req, res) => {
   try {
@@ -88,57 +90,3 @@ export const checkRegistrationStatus = async (req, res) => {
 }
 };
 
-export const exportParticipantsCsv = async (req, res) => {
-	try {
-		const eventId = req.params.id;
-
-		const registrations = await Registration.find({
-			event: eventId
-		}).populate('user', 'name email');
-
-		res.setHeader('Content-Type', 'text/csv');
-
-		res.setHeader(
-			'Content-Disposition',
-			`attachment; filename=participants-${eventId}.csv`
-		);
-
-		const esc = (value) => {
-			if (value === undefined || value === null) {
-				return '';
-			}
-
-			const str =
-				typeof value === 'string'
-					? value
-					: String(value);
-
-			return `"${str.replace(/"/g, '""')}"`;
-		};
-
-		res.write(
-			['Name', 'Email', 'Status', 'Registered At']
-				.map(esc)
-				.join(',') + '\n'
-		);
-
-		for (const registration of registrations) {
-			const row = [
-				registration.user?.name || '',
-				registration.user?.email || '',
-				registration.status || '',
-				registration.createdAt
-					? new Date(
-							registration.createdAt
-					  ).toISOString()
-					: ''
-			];
-
-			res.write(row.map(esc).join(',') + '\n');
-		}
-
-		res.end();
-	} catch (err) {
-		res.status(500).json({ message: err.message });
-	}
-};
